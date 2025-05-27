@@ -37,7 +37,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Cliente.findByNombClie", query = "SELECT c FROM Cliente c WHERE c.nombClie = :nombClie"),
     @NamedQuery(name = "Cliente.findByFechNaciClie", query = "SELECT c FROM Cliente c WHERE c.fechNaciClie = :fechNaciClie"),
     @NamedQuery(name = "Cliente.findByLogiClie", query = "SELECT c FROM Cliente c WHERE c.logiClie = :logiClie"),
-    @NamedQuery(name = "Cliente.findByPassClie", query = "SELECT c FROM Cliente c WHERE c.passClie = :passClie")})
+    @NamedQuery(name = "Cliente.findByPassClie", query = "SELECT c FROM Cliente c WHERE c.passClie = :passClie"),
+    @NamedQuery(name = "Cliente.validar", query = "SELECT c FROM Cliente c WHERE c.logiClie = :logiClie AND c.passClie = :passClie")})
 public class Cliente implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -188,5 +189,5 @@ public class Cliente implements Serializable {
     public String toString() {
         return "dto.Cliente[ codiClie=" + codiClie + " ]";
     }
-    
+
 }

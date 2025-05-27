@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
@@ -133,5 +134,18 @@ public class ClienteJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public Cliente validar(String login, String clave) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Cliente> query = em.createNamedQuery("Cliente.validar", Cliente.class);
+            query.setParameter("logiClie", login);
+            query.setParameter("passClie", clave);
+            List<Cliente> resultados = query.getResultList();
+            return resultados.isEmpty() ? null : resultados.get(0);
+        } finally {
+            em.close();
+        }
+    }
+
 }
