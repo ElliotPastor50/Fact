@@ -6,6 +6,7 @@ package servlet;
 
 import dao.ClienteJpaController;
 import dto.Cliente;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.json.JSONObject;
 
 /**
  *
@@ -24,29 +26,41 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/CambiarClaveServlet")
 public class CambiarClaveServlet extends HttpServlet {
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         Cliente user = (Cliente) session.getAttribute("cliente");
 
-        String actual = request.getParameter("actual");
-        String nueva = request.getParameter("nueva");
-        String confirma = request.getParameter("confirma");
+        BufferedReader reader = request.getReader();
+        StringBuilder sb = new StringBuilder();
+        String linea;
+        while ((linea = reader.readLine()) != null) {
+            sb.append(linea);
+        }
 
+        JSONObject obj = new JSONObject(sb.toString());
+
+        String actual = obj.getString("actual");
+        String nueva = obj.getString("nueva");
+        String confirma = obj.getString("confirma");
+
+        JSONObject res = new JSONObject();
         if (!user.getPassClie().equals(actual)) {
-            response.sendRedirect("cambiarClave.html?error=clave_incorrecta");
-            return;
-        }
-        if (!nueva.equals(confirma)) {
-            response.sendRedirect("cambiarClave.html?error=no_coincide");
-            return;
+            res.put("mensaje", "Clave actual incorrecta");
+        } else if (!nueva.equals(confirma)) {
+            res.put("mensaje", "La nueva clave no coincide");
+        } else {
+            user.setPassClie(nueva);
+            try {
+                new ClienteJpaController().edit(user);
+            } catch (Exception ex) {
+                Logger.getLogger(CambiarClaveServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            res.put("mensaje", "Clave actualizada correctamente");
         }
 
-        user.setPassClie(nueva);
-        try {
-            new ClienteJpaController().edit(user);
-        } catch (Exception ex) {
-            Logger.getLogger(CambiarClaveServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        response.sendRedirect("principal.html?clave_actualizada=1");
+        response.setContentType("application/json");
+        response.getWriter().write(res.toString());
     }
 }
+
