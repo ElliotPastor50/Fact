@@ -1,15 +1,31 @@
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Principal</title>
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+</head>
+<body id="page-top">
+  <div class="container mt-4">
+    <h2 class="mb-3">Mantenimiento Cliente</h2>
+    <a href="cambiarClave.html" class="btn btn-warning mb-3">Cambiar Clave</a>
+
+    <form action="ClienteServlet" method="post">
+      <input type="hidden" name="accion" value="agregar">
+      <input type="text" name="ndni" class="form-control mb-2" placeholder="DNI" required>
+      <input type="text" name="appa" class="form-control mb-2" placeholder="Apellido Paterno" required>
+      <input type="text" name="apma" class="form-control mb-2" placeholder="Apellido Materno" required>
+      <input type="text" name="nomb" class="form-control mb-2" placeholder="Nombres" required>
+      <input type="date" name="fecha" class="form-control mb-2" required>
+      <input type="text" name="login" class="form-control mb-2" placeholder="Login" required>
+      <button type="submit" class="btn btn-primary">Agregar</button>
+    </form>
+
+    <hr>
+    <h4>Listado de Clientes</h4>
+    <div id="tablaClientes"></div>
+  </div>
+</body>
 </html>
+
